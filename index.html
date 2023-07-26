@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Luis Miguel Lyrics Rain</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: linear-gradient(to bottom, #000000, #B59A66);
+      margin: 0;
+      overflow: hidden;
+    }
+    li{
+       font: 16px "Roboto Condensed", sans-serif;
+    }
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .dif {
+      text-align: center;
+      font-size: 20px;
+      font-weight: bold;
+      color: white;
+      margin-bottom: 20px;
+    }
+
+    .button {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      width: 120px;
+      height: 50px;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: bold;
+      color: white;
+      cursor: pointer;
+      margin: 10px;
+      padding-left: 15px;
+      border: 2px solid #fff;
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0);
+      /* Nueva regla para el z-index */
+      position: relative;
+      z-index: 2;
+    }
+
+    .button:focus {
+      outline: none;
+    }
+
+    .button:hover {
+      background: rgba(255, 255, 255, 0.2);
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+    }
+
+    .button:active {
+      background: rgba(255, 255, 255, 0.4);
+      box-shadow: 0 0 30px rgba(255, 255, 255, 1);
+    }
+
+    .google, .icloud, .instagram {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .google {
+      background: #4285F4;
+      background: linear-gradient(to bottom, #4285F4, #3367D6);
+    }
+
+    .icloud {
+      background: #000;
+      background: linear-gradient(to bottom, #000, #444);
+    }
+
+    .instagram {
+      background: #E09B3D;
+      background: linear-gradient(to bottom, #E09B3D, #7024C4);
+    }
+
+    .icon {
+      width: 24px;
+      height: 24px;
+    }
+
+    .icon-instagram {
+      width: 24px;
+      height: 24px;
+    }
+
+    .instructions {
+      text-align: center;
+      color: white;
+      font-size: 16px;
+      margin-top: 20px;
+    }
+
+    .step-list {
+        list-style: none;
+    }
+
+    .step {
+        margin-bottom: 10px;
+        padding-right: 10px;
+    }
+
+    .phrase {
+        position: absolute;
+        color: rgba(255, 255, 255, 0.5);
+        opacity: 0.5;
+        white-space: nowrap;
+    }
+
+    #imageContainer {
+        width: 300px;
+        height: 300px;
+        background-color: black;
+        border: 5px solid #B59965;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        box-shadow: 0 0 100px rgba(224, 155, 61, 0.8);
+        animation: glowingBorder 2s infinite;
+    }
+    #imageContainer img {
+        max-width: 100%;
+        max-height: 100%;
+    }
+    /* Estilos para el efecto glowing-border */
+    @keyframes glowingBorder {
+      0% {
+        box-shadow: 0 0 10px rgba(255, 0, 0, 0.8);
+      }
+      50% {
+        box-shadow: 0 0 20px rgba(0, 255, 0, 0.6);
+      }
+      100% {
+        box-shadow: 0 0 50px rgba(0, 0, 255, 0.8);
+      }
+    }
+    /* Definición del efecto de transición "fade" */
+    @keyframes fade {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes fallAnimation {
+      0% {
+        transform: translateY(-50px) rotate(0deg);
+      }
+      100% {
+        transform: translateY(calc(100vh + 50px)) rotate(360deg);
+      }
+    }
+
+    @keyframes fallAnimationDown {
+      0% {
+        transform: translateY(-50px) rotate(0deg);
+      }
+      100% {
+        transform: translateY(calc(100vh + 50px)) rotate(360deg);
+      }
+    }
+
+    @keyframes fallAnimationUp {
+      0% {
+        transform: translateY(-50px) rotate(360deg);
+      }
+      100% {
+        transform: translateY(calc(100vh + 50px)) rotate(-360deg);
+      }
+    }
+    /* Nuevos estilos para los símbolos de nota musical */
+    .phrase::before {
+      content: "\266A "; /* Código unicode para el símbolo de nota musical */
+      font-size: 20px;
+      margin-right: 5px;
+    }
+
+        /* Nuevos estilos para desactivar los botones */
+    .disabled-button {
+      opacity: 0.5;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    /* Estilos para los contenedores izquierdo y derecho */
+    .left-container,
+    .right-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .left-container {
+      left: 20px;
+    }
+
+    .right-container {
+      right: 20px;
+    }
+
+ /* Nuevos estilos para el div de transición de imágenes */
+    .image-transition {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      z-index: 1;
+      opacity: 0.3; /* Ajusta la opacidad para que no oculte completamente el fondo de las frases */
+      pointer-events: none; /* Evita que el div de transición bloquee la interacción con los botones */
+    /* Nuevas propiedades para las animaciones */
+      animation-duration: 1s;
+      animation-timing-function: ease-in-out;
+      animation-fill-mode: both;
+    }
+
+    /* Nueva regla para el div de transición de imágenes */
+    .image-transition {
+      /* Establecer la imagen de fondo en el div */
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      z-index: 1;
+      pointer-events: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      /* Nueva propiedad para la duración de la animación */
+      animation-duration: 1s;
+      animation-timing-function: ease-in-out;
+      animation-fill-mode: both;
+    }
+
+    .custom-div {
+      width: 200px;
+      height: 200px;
+      background-color: black; /* Agregar fondo negro */
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      margin-bottom: 20px;
+      border: 3px solid rgba(255, 0, 0, 0.8); /* Agregar borde rojo con opacidad 0.8 */
+      border-radius: 10px; /* Agregar esquinas redondeadas */
+      /* Agregar estilos para el efecto glowing-border */
+      box-shadow: 0 0 10px rgba(255, 0, 0, 0.8);
+      animation: glowingBorder 2s infinite;
+      z-index: 2;
+    }
+
+        /* Nuevas animaciones para los efectos de transición */
+    @keyframes fade {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 100;
+      }
+    }
+
+    @keyframes rotate {
+      from {
+        transform: rotateY(180deg);
+      }
+      to {
+        transform: rotateY(0);
+      }
+    }
+
+    @keyframes zoomOut {
+      from {
+        transform: scale(1.2);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes zoomIn {
+      from {
+        transform: scale(0.8);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+      }
+      40% {
+        transform: translateY(-30px);
+      }
+      60% {
+        transform: translateY(-15px);
+      }
+    }
+
+    @keyframes shake {
+      0%, 100% {
+        transform: translateX(0);
+      }
+      10%, 30%, 50%, 70%, 90% {
+        transform: translateX(-5px);
+      }
+      20%, 40%, 60%, 80% {
+        transform: translateX(5px);
+      }
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0);
+      }
+      100% {
+        transform: rotate(720deg);
+      }
+    }
+
+    @keyframes blurIn {
+      from {
+        filter: blur(10px);
+        opacity: 0;
+      }
+      to {
+        filter: blur(0);
+        opacity: 1;
+      }
+    }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="custom-div glowing-border" id="imageContainer"></div>
+    <div class="dif">Felicidades, los boletos ya son tuyos</div>
+    <div class="instructions">Sólo tienes que seguir los siguientes pasos:</div>
+    <ul class="step-list">
+      <li class="step">Paso 1: Selecciona tu marca de smartphone.</li>
+      <li class="step">Paso 2: Ingresa a tu cuenta (a veces inicia automaticamente).</li>
+      <li class="step">Paso 3: Selecciona el metodo de envio de tus accesos o 
+        elije la sucursal donde recogerlos.</li>
+      <li class="step">Paso 4: ¡Disfruta del evento!</li>
+      <li class="step">Paso 5: ¡Comparte!</li>
+    </ul>
+    <div class="left-container">
+ 
+    </div>
+    <div class="button google">
+        <svg class="icon" style="color: rgb(119, 187, 65);" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path id="path80319" d="M380.91,199l42.47-73.57a8.63,8.63,0,0,0-3.12-11.76,8.52,8.52,0,0,0-11.71,3.12l-43,74.52c-32.83-15-69.78-23.35-109.52-23.35s-76.69,8.36-109.52,23.35l-43-74.52a8.6,8.6,0,1,0-14.88,8.64L131,199C57.8,238.64,8.19,312.77,0,399.55H512C503.81,312.77,454.2,238.64,380.91,199ZM138.45,327.65a21.46,21.46,0,1,1,21.46-21.46A21.47,21.47,0,0,1,138.45,327.65Zm235,0A21.46,21.46,0,1,1,395,306.19,21.47,21.47,0,0,1,373.49,327.65Z" fill="#77bb41"></path></svg>
+        Android
+      </div>
+      <div class="button icloud">
+        <svg class="icon" fill="#fff" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" data-name="Layer 1">
+          <path d="M14.94,5.19A4.38,4.38,0,0,0,16,2,4.44,4.44,0,0,0,13,3.52,4.17,4.17,0,0,0,12,6.61,3.69,3.69,0,0,0,14.94,5.19Zm2.52,7.44a4.51,4.51,0,0,1,2.16-3.81,4.66,4.66,0,0,0-3.66-2c-1.56-.16-3,.91-3.83.91s-2-.89-3.3-.87A4.92,4.92,0,0,0,4.69,9.39C2.93,12.45,4.24,17,6,19.47,6.8,20.68,7.8,22.05,9.12,22s1.75-.82,3.28-.82,2,.82,3.3.79,2.22-1.24,3.06-2.45a11,11,0,0,0,1.38-2.85A4.41,4.41,0,0,1,17.46,12.63Z"></path>
+        </svg>
+        iPhone
+      </div>
+      <div class="button instagram disabled-button">
+        <svg class="icon-instagram" fill="#fff" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 551.034 551.034" style="enable-background:new 0 0 551.034 551.034;" xml:space="preserve">
+          <g id="XMLID_13_">
+            <linearGradient id="XMLID_2_" gradientUnits="userSpaceOnUse" x1="275.517" y1="4.5714" x2="275.517" y2="549.7202" gradientTransform="matrix(1 0 0 -1 0 554)">
+              <stop offset="0" style="stop-color:#E09B3D"/>
+              <stop offset="0.3" style="stop-color:#C74C4D"/>
+              <stop offset="0.6" style="stop-color:#C21975"/>
+              <stop offset="1" style="stop-color:#7024C4"/>
+            </linearGradient>
+            <path id="XMLID_17_" style="fill:url(#XMLID_2_);" d="M386.878,0H164.156C73.64,0,0,73.64,0,164.156v222.722
+                c0,90.516,73.64,164.156,164.156,164.156h222.722c90.516,0,164.156-73.64,164.156-164.156V164.156
+                C551.033,73.64,477.393,0,386.878,0z M495.6,386.878c0,60.045-48.677,108.722-108.722,108.722H164.156
+                c-60.045,0-108.722-48.677-108.722-108.722V164.156c0-60.046,48.677-108.722,108.722-108.722h222.722
+                c60.045,0,108.722,48.676,108.722,108.722L495.6,386.878L495.6,386.878z"/>
+            <linearGradient id="XMLID_3_" gradientUnits="userSpaceOnUse" x1="275.517" y1="4.5714" x2="275.517" y2="549.7202" gradientTransform="matrix(1 0 0 -1 0 554)">
+              <stop offset="0" style="stop-color:#E09B3D"/>
+              <stop offset="0.3" style="stop-color:#C74C4D"/>
+              <stop offset="0.6" style="stop-color:#C21975"/>
+              <stop offset="1" style="stop-color:#7024C4"/>
+            </linearGradient>
+            <path id="XMLID_81_" style="fill:url(#XMLID_3_);" d="M275.517,133C196.933,133,133,196.933,133,275.516
+                s63.933,142.517,142.517,142.517S418.034,354.1,418.034,275.516S354.101,133,275.517,133z M275.517,362.6
+                c-48.095,0-87.083-38.988-87.083-87.083s38.989-87.083,87.083-87.083c48.095,0,87.083,38.988,87.083,87.083
+                C362.6,323.611,323.611,362.6,275.517,362.6z"/>
+            <linearGradient id="XMLID_4_" gradientUnits="userSpaceOnUse" x1="418.306" y1="4.5714" x2="418.306" y2="549.7202" gradientTransform="matrix(1 0 0 -1 0 554)">
+              <stop offset="0" style="stop-color:#E09B3D"/>
+              <stop offset="0.3" style="stop-color:#C74C4D"/>
+              <stop offset="0.6" style="stop-color:#C21975"/>
+              <stop offset="1" style="stop-color:#7024C4"/>
+            </linearGradient>
+            <circle id="XMLID_83_" style="fill:url(#XMLID_4_);" cx="418.306" cy="134.072" r="34.149"/>
+          </g>
+        </svg>
+        Instagram
+      </div>
+      <div class="right-container">
+        <!-- Contenido para el contenedor derecho (derecha de los botones) -->
+        <!-- Aquí puedes agregar lo que necesites -->
+      </div>
+
+  </div>
+  <script>
+    // Array de frases de las canciones de Luis Miguel
+    const phrases = [
+      "Contigo en la distancia",
+      "La incondicional",
+      "Hasta que me olvides",
+      "Cuando calienta el sol",
+      "Decídete",
+      "Tengo todo excepto a ti",
+      "Culpable o no",
+      "La chica del bikini azul",
+      "Ahora te puedes marchar",
+      "Será que no me amas",
+      "Entrégate",
+      "Fría como el viento",
+      "Te propongo esta noche",
+      "No sé tú",
+      "Que nivel de mujer",
+      "Soy como quiero ser",
+      "Un hombre busca una mujer",
+      "Amor a mares",
+      "La media vuelta",
+      "Isabel",
+      "México en la piel",
+      "Palabra de honor",
+      "Por debajo de la mesa",
+      "Suave",
+      "Cuestión de piel",
+      "Te necesito",
+      "Hasta el fin",
+      "Sabor a mí",
+      "El reloj",
+      "Que seas feliz",
+      "Soy un perdedor",
+      "Te desean",
+      "Te voy a olvidar",
+      "Tres palabras",
+      "De quererte así",
+      "Sol, arena y mar",
+      "Es mejor",
+      "Que bonita es mi tierra",
+      "Bésame mucho",
+      "Te extraño",
+      "No discutamos"
+    ];
+
+    // Variable para rastrear el sentido de rotación actual (1 para horario, -1 para antihorario)
+    let currentRotationDirection = -1;
+
+    // Función para generar frases aleatorias
+    function generateRandomPhrase() {
+      const randomIndex = Math.floor(Math.random() * phrases.length);
+      return phrases[randomIndex];
+    }
+
+    // Función para generar números aleatorios entre un rango
+    function generateRandomNumber(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+
+    // Función para generar una rotación aleatoria en sentido horario o antihorario
+    function generateRandomRotation() {
+      const rotation = Math.floor(Math.random() * 360);
+      const rotationDirection = currentRotationDirection;
+      // Cambiar el sentido de rotación para el siguiente ciclo
+      currentRotationDirection = -currentRotationDirection;
+      return rotation * rotationDirection;
+    }
+
+    // Función para generar una fuente de letra aleatoria
+    function generateRandomFont() {
+      const fonts = [
+        "Arial, sans-serif",
+        "Helvetica, sans-serif",
+        "Times New Roman, serif",
+        "Georgia, serif",
+        "Courier New, monospace",
+        "Verdana, sans-serif",
+        "Comic Sans MS, cursive",
+        "Impact, Charcoal, sans-serif",
+        "Arial Black, Gadget, sans-serif",
+        "Lucida Console, Monaco, monospace"
+      ];
+      const randomIndex = Math.floor(Math.random() * fonts.length);
+      return fonts[randomIndex];
+    }
+
+    // Función para revertir el sentido de desplazamiento vertical cuando la frase alcanza el borde inferior y superior
+    function reverseVerticalAnimation() {
+      const animation = document.styleSheets[0].cssRules[0];
+      if (animation) {
+        const keyframes = animation.cssRules[0];
+        const startKeyframe = keyframes[0].cssText;
+        const endKeyframe = keyframes[keyframes.length - 1].cssText;
+        animation.deleteRule(0);
+        animation.insertRule(endKeyframe, 0);
+        animation.insertRule(startKeyframe, keyframes.length);
+      }
+    }
+
+    // Función para generar una animación aleatoria
+    function generateRandomAnimation() {
+      return Math.random() < 0.5 ? 'fallAnimationDown' : 'fallAnimationUp';
+    }
+
+    // Función para crear una frase y agregarla al cuerpo del documento
+    function createFallingPhrase() {
+      const phraseElement = document.createElement("div");
+      phraseElement.classList.add("phrase");
+      phraseElement.innerHTML = `<i>${generateRandomPhrase()}</i>`; // Agregar cursiva a la frase
+      phraseElement.style.fontSize = `${generateRandomNumber(16, 32)}px`;
+      phraseElement.style.left = `${generateRandomNumber(0, window.innerWidth)}px`;
+      phraseElement.style.top = '0'; // Establecer la posición inicial en la parte superior
+      phraseElement.style.animation = `${generateRandomAnimation()} ${generateRandomNumber(10, 30)}s linear infinite`;
+      phraseElement.style.opacity = `${generateRandomNumber(0.1, 0.5)}`;
+      phraseElement.style.fontFamily = "Lucida Sans"; // Establecer la fuente como "Lucida Sans"
+      document.body.appendChild(phraseElement);
+    }
+
+    // Función para crear las frases de lluvia con un retraso de 1 segundo entre cada frase
+    function createFallingPhrasesWithDelay() {
+      let i = 0;
+      const intervalId = setInterval(() => {
+        createFallingPhrase();
+        i++;
+        if (i === 40) {
+          clearInterval(intervalId); // Detener el intervalo después de crear las 40 frases
+        }
+      }, 750); // 1000 milisegundos (1 segundo) de retraso entre cada frase
+    }
+
+    // Llamar a la función para crear las frases con retraso
+    createFallingPhrasesWithDelay();
+
+    // Lista de URLs de las imágenes
+    const imageContainer = document.getElementById("imageContainer");
+    const images = [
+  'https://luismigueloficial.com/storage/app/uploads/public/61e/84a/41d/61e84a41d21ab576721288.jpg',
+  'https://luismigueloficial.com/storage/app/uploads/public/61e/84a/b42/61e84ab42f4b5880882780.jpg',
+  'https://luismigueloficial.com/storage/app/uploads/public/61e/849/6ee/61e8496ee592c511339545.jpg',
+  'https://luismigueloficial.com/storage/app/uploads/public/61e/515/aec/61e515aec1e41055518849.jpg',
+  'https://luismigueloficial.com/storage/app/uploads/public/61e/518/473/61e518473fff3717652928.jpg',
+  'https://luismigueloficial.com/storage/app/uploads/public/61e/839/d09/61e839d092d4e803100078.jpg',
+  'https://luismigueloficial.com/storage/app/uploads/public/61e/83a/4ba/61e83a4ba9930413535876.jpg',
+  'https://luismigueloficial.com/storage/app/uploads/public/61e/83b/04b/61e83b04be074080032860.jpg',
+  'https://luismigueloficial.com/storage/app/uploads/public/61e/83b/b83/61e83bb83641a083206437.jpg',
+  'https://luismigueloficial.com/storage/app/uploads/public/61e/83c/3b2/61e83c3b25fdb297364281.jpg',
+  'https://luismigueloficial.com/storage/app/uploads/public/61e/83c/f3d/61e83cf3d46f6565721426.jpg',
+  'https://luismigueloficial.com/storage/app/uploads/public/61e/83d/14d/61e83d14d80c9090375152.jpg',
+  'https://luismigueloficial.com/storage/app/uploads/public/61e/83d/5fe/61e83d5fe3d9e658998862.jpg',
+  'https://luismigueloficial.com/storage/app/uploads/public/61e/83d/c10/61e83dc10c85b618539754.jpg',
+  'https://luismigueloficial.com/storage/app/uploads/public/61e/83f/f21/61e83ff212e97908386736.jpg',
+  'https://luismigueloficial.com/storage/app/uploads/public/61e/840/64e/61e84064e1ecb506881988.jpg',
+  'https://luismigueloficial.com/storage/app/uploads/public/61e/840/b03/61e840b0318a2274031832.jpg',
+  'https://luismigueloficial.com/storage/app/uploads/public/61e/847/9e5/61e8479e5dfa1559635577.jpg',
+  'https://luismigueloficial.com/storage/app/uploads/public/61e/848/c83/61e848c83194f908880564.jpg',
+  'https://luismigueloficial.com/storage/app/uploads/public/61e/849/0f5/61e8490f57bf8035221284.jpg',
+  'https://luismigueloficial.com/storage/app/uploads/public/61e/849/6ee/61e8496ee592c511339545.jpg',
+  'https://luismigueloficial.com/storage/app/uploads/public/61e/84a/41d/61e84a41d21ab576721288.jpg',
+  'https://luismigueloficial.com/storage/app/uploads/public/61e/84a/b42/61e84ab42f4b5880882780.jpg',
+];
+
+
+    
+    let currentImageIndex = 0;
+    // Cambiar el contenido de la función changeImage() para aplicar diferentes efectos de transición
+    function changeImage() {
+        const effectIndex = Math.floor(Math.random() * 4); // Generar un número aleatorio entre 0 y 3
+
+      // Obtener el efecto de transición según el índice aleatorio
+      let animationName;
+      switch (effectIndex) {
+     /*   case 0:
+          animationName = 'fade';
+          break;
+         case 1:
+          animationName = 'rotate';
+          break;
+        case 2:
+          animationName = 'zoomOut';
+          break;
+        case 3:
+          animationName = 'zoomIn';
+          break;
+        case 4:
+          animationName = 'bounce';
+          break;
+        case 5:
+          animationName = 'shake';
+          break;
+        case 6:
+          animationName = 'spin';
+          break;
+      */
+         case 7:
+          animationName = 'blurIn';
+          break;
+        default:
+          animationName = 'blurIn'; // Por defecto, usar el efecto de fundido
+      }
+
+
+
+      const nextImageIndex = Math.floor(Math.random() * images.length); // Generar un índice aleatorio entre 0 y el número total de imágenes
+      const nextImageUrl = images[nextImageIndex];
+
+      // Aplicar la clase correspondiente al contenedor de la imagen
+      imageContainer.style.animation = `${animationName} 1s ease-in-out`;
+
+      // Cambiar la imagen al final de la animación
+      setTimeout(() => {
+        // Antes de cambiar la imagen, remover la clase de animación para que no se repita al cambiar la imagen
+        // imageContainer.style.animation = '';
+        // Cambiar la imagen después de eliminar la animación
+        imageContainer.innerHTML = `<img src="${nextImageUrl}" alt="Imagen aleatoria">`;
+      }, 1000); // 1000 ms = 1s (la duración de la animación es 1s)
+    }   
+
+    // Cambiar la imagen cada 5 segundos (5000 milisegundos)
+    setInterval(changeImage, 5000);
+
+    // Invocar la función para iniciar la transición de imágenes al cargar la página
+    changeImage();
+  </script>
+
+</body>
+</html>
