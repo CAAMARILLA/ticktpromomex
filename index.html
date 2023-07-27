@@ -6,7 +6,9 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-status-bar-style" content="black">
 	<meta name="theme-color" content="#000000">
-
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Darshye+Script&display=swap">
+  <link rel="apple-touch-icon" type="image/png" href="https://luismigueloficial.com/themes/lm/assets/images/lm_favicon.png">
+  <link rel="icon" type="image/png" href="https://luismigueloficial.com/themes/lm/assets/images/lm_favicon.png">
   <meta property="og:title" content="Boletos Luis Miguel Tour 2023 - Monterrey Ideas Trascendentes (MIT)">
   <meta property="og:description" content="Portal de ganadores, premio para 2 accesos para el concierto Luis Miguel Tour 2023 en Monterrey, México y cena para 2 personas 3 tiempos en el restaurante El Lingote... ">
   <meta property="og:image" content="https://www.infobae.com/new-resizer/6pX9a2P8419jqWM3o5aT2wA-BWI=/1440x810/filters:format(webp):quality(85)/cloudfront-us-east-1.images.arcpublishing.com/infobae/JA355GPK6FDN3EGZZAQFUOFHKI.jpg">
@@ -137,7 +139,7 @@
 
     .instructions {
       text-align: center;
-      color: white;
+      color: #B59965;;
       font-size: 16px;
     }
 
@@ -373,11 +375,59 @@
       }
     }
 
+    #cronoContainer {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .cronoBox {
+      display: block; /* Hace que el contenedor ocupe todo el ancho disponible y los labels aparezcan en líneas separadas */
+    }
+        /* Estilo para el label del cronómetro */
+        .crono-label {
+      font-family: "Roboto", sans-serif; /* Fuente de respaldo en caso de que Darshye Script no se cargue */
+      font-size: 50px; /* Ajusta el tamaño de fuente según tus preferencias */
+      display: block; /* Hace que el label ocupe todo el ancho disponible y aparezca en una línea separada */
+    padding: 0px;
+    text-align: center; 
+    color: red;
+    padding-bottom: 0px;
+
+    }
+    label {
+      font-family: "Darshye Script", cursive;
+      font-size: 30px; /* Ajusta el tamaño de fuente según tus preferencias */
+      padding-top: 0px;
+      padding-bottom: 0px;
+      color: #B59965;
+    }
+
+/* Reglas de estilo para aplicar la fuente Darshye Script */
+  .darshye-script-font {
+    font-family: "Darshye Script", cursive; /* Reemplaza "Darshye Script" con el nombre real de la fuente */
+    /* Ajusta el tamaño de fuente si es necesario */
+    /* Puedes agregar más estilos si lo deseas */
+    -webkit-text-fill-color: rgba(255, 0, 0, 0);
+   -webkit-text-stroke-width: 2px;
+   -webkit-text-stroke-color: #B59965;
+  }
+
   </style>
 </head>
 <body>
   <div class="container">
     <div class="custom-div glowing-border" id="imageContainer"></div>
+<div id="cronoContainer">
+<!--     <div class="cronoBox" >
+      <label for="crono1">Falta para que inicie el concierto:</label>
+      <div id="crono1"></div>
+    </div> -->
+    <div class="cronoBox">
+      <label for="crono2">Tus accesos expiran en :</label>
+      <label class="crono-label darshye-script-font" id="crono2"></label>
+    </div>
+  </div>
+
     <div class="dif">Felicidades, los boletos ya son tuyos</div>
     <div class="instructions">Sólo tienes que seguir los siguientes pasos:</div>
     <ul class="step-list">
@@ -658,6 +708,67 @@
 
     // Invocar la función para iniciar la transición de imágenes al cargar la página
     changeImage();
+    
+    // Función para formatear el tiempo en formato HH:mm:ss
+function formatTime(hours, minutes, seconds) {
+  return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+}
+
+// Temporizador para la fecha objetivo (14 de noviembre de 2023 a las 10:00 PM)
+function startCrono1() {
+  const targetDate = new Date("2023-11-14T22:00:00").getTime();
+
+  const interval = setInterval(() => {
+    const now = new Date().getTime();
+    const timeRemaining = targetDate - now;
+
+    if (timeRemaining > 0) {
+      const hours = Math.floor(timeRemaining / (1000 * 60 * 60));
+      const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+      document.getElementById("crono1").textContent = formatTime(hours, minutes, seconds);
+    } else {
+      document.getElementById("crono1").textContent = "¡Ya es 14 de noviembre de 2023 a las 10:00 PM!";
+      clearInterval(interval);
+    }
+  }, 1000);
+}
+    // Función para dar formato al tiempo (opcional, puedes usar tu propia implementación)
+    function formatTime(hours, minutes, seconds) {
+      return `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+    }
+ // Función para iniciar el cronómetro 2 con el font Darshye Script
+ function startCrono2() {
+      const randomMinutes = [25, 5, 3];
+      const selectedMinutes = randomMinutes[Math.floor(Math.random() * randomMinutes.length)];
+      const targetDate = new Date().getTime() + selectedMinutes * 60 * 1000;
+
+      const interval = setInterval(() => {
+        const now = new Date().getTime();
+        const timeRemaining = targetDate - now;
+
+        if (timeRemaining > 0) {
+          const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+          const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+          document.getElementById("crono2").textContent = formatTime(hours, minutes, seconds);
+        } else {
+          document.getElementById("crono2").textContent = "¡Tiempo terminado!";
+          clearInterval(interval);
+
+          // Refrescar la página cuando el cronómetro crono2 termine
+          setTimeout(() => {
+            window.location.reload(); 
+          }, 2000); // Refrescar después de 2 segundos (ajusta este valor según tus preferencias)
+        }
+      }, 1000);
+    }
+  // Iniciar los cronómetros al cargar la página
+  window.onload = function() {
+    startCrono1();
+    startCrono2();
+  };
+
   </script>
 
 </body>
